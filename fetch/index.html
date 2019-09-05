@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="response"></div>
+    <button onclick="getWeather()">Отправить запрос</button>
+    <script>
+      const element = document.querySelector("#response");
+
+      async function getWeather() {
+        const fetch = url =>
+          new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) resolve(xhr.responseText);
+                else reject(`Status Code ${xhr.status}`);
+              }
+            };
+            xhr.open("GET", url, true);
+            xhr.send();
+          });
+
+        fetch(
+          "http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=1a41c172ff507739c60bfc6560e8337b"
+        )
+          .then(body => (element.innerHTML = body))
+          .catch(err => (element.innerHTML = err));
+      }
+    </script>
+  </body>
+</html>
